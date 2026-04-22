@@ -1,6 +1,7 @@
 import "server-only";
 
 const DEFAULT_OCR_API_URL = "http://127.0.0.1:8000/ocr";
+const OCR_FETCH_TIMEOUT_MS = 30000;
 
 type OcrPageResult = {
   page: number;
@@ -142,11 +143,28 @@ async function postToOcrApi(file: File): Promise<unknown> {
 
   console.log(`[OCR] API istegi baslatildi: ${file.name} (${file.size} bytes)`);
 
-  const response = await fetch(getOcrApiUrl(), {
-    method: "POST",
-    body: formData,
-    cache: "no-store",
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort(`OCR API zaman asimi (${OCR_FETCH_TIMEOUT_MS} ms)`);
+  }, OCR_FETCH_TIMEOUT_MS);
+
+  let response: Response;
+
+  try {
+    response = await fetch(getOcrApiUrl(), {
+      method: "POST",
+      body: formData,
+      cache: "no-store",
+      signal: controller.signal,
+    });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "OCR API baglantisi kurulurken bilinmeyen hata olustu.";
+    console.error(`[OCR] API erisim hatasi: ${message}`);
+    throw new Error(`OCR API erisilemedi: ${message}. URL: ${getOcrApiUrl()}`);
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (!response.ok) {
     const body = await response.text();
