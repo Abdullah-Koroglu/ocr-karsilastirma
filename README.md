@@ -47,6 +47,52 @@ npm run dev
 
 Tarayicidan `http://localhost:3000` adresini acin.
 
+## Docker ile Calistirma
+
+### 1) Docker image build
+
+```bash
+docker build -t ocr-karsilastirma .
+```
+
+### 2) Docker container run
+
+```bash
+docker run --rm -p 3000:3000 \
+	-e OCR_API_URL=http://host.docker.internal:8000/ocr \
+	-e OPENAI_API_KEY=your-openai-key \
+	ocr-karsilastirma
+```
+
+### 3) Docker Compose ile (onerilen)
+
+```bash
+docker compose --env-file .env.docker up --build
+```
+
+Compose iki farkli mod destekler:
+
+- Dis OCR servisi (varsayilan):
+
+```bash
+docker compose --env-file .env.docker up --build
+```
+
+Bu modda `.env.docker` icindeki `OCR_API_URL` degeri kullanilir.
+
+- Compose icindeki OCR servisi ile:
+
+```bash
+docker compose --env-file .env.docker.with-ocr --profile with-ocr up --build
+```
+
+Bu komut `rapidocr-api` servisini de ayaga kaldirir. Disaridan OCR API test etmek isterseniz `http://localhost:8099/ocr` adresini kullanabilirsiniz.
+
+Env dosyalari:
+
+- `.env.docker`: Dis OCR servisine baglanan varsayilan ayarlar
+- `.env.docker.with-ocr`: Compose icindeki `rapidocr-api` servisine baglanan ayarlar
+
 ## Notlar
 
 - Dosyalar diske yazilmaz; Server Action icinden `multipart/form-data` ile OCR servisine gonderilir.

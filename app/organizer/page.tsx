@@ -297,7 +297,8 @@ async function blobToPdfBytes(blob: Blob): Promise<Uint8Array> {
 }
 
 function downloadBytes(bytes: Uint8Array, fileName: string, mimeType: string) {
-  const blob = new Blob([bytes], { type: mimeType });
+  const normalizedBytes = Uint8Array.from(bytes);
+  const blob = new Blob([normalizedBytes], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;

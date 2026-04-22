@@ -112,7 +112,7 @@ export function extractCriticalFields(rawText: string): ExtractedFields {
 
   const tckn = firstValidMatch(TCKN_REGEX, normalized, isValidTckn);
   const chassisNo = firstValidMatch(CHASSIS_REGEX, normalized);
-  const plate = firstValidMatch(PLATE_REGEX, normalized)?.replace(/\s/g, "");
+  const plate = firstValidMatch(PLATE_REGEX, normalized)?.replace(/\s/g, "") ?? null;
   const fullName = extractNameByLabeledField(normalized) ?? extractNameByLineFallback(normalized);
 
   return {

@@ -23,16 +23,20 @@ function extractPaddleLikeText(payload: unknown): string {
   }
 
   const entries = Object.entries(payload)
-    .filter(([key, value]) => /^\d+$/.test(key) && isRecord(value) && typeof value.rec_txt === "string")
-    .sort((a, b) => Number(a[0]) - Number(b[0]));
+    .flatMap(([key, value]) => {
+      if (!/^\d+$/.test(key) || !isRecord(value) || typeof value.rec_txt !== "string") {
+        return [] as Array<{ index: number; text: string }>;
+      }
+
+      return [{ index: Number(key), text: value.rec_txt.trim() }];
+    })
+    .sort((a, b) => a.index - b.index);
 
   if (!entries.length) {
     return "";
   }
 
-  const lines = entries
-    .map(([, value]) => String(value.rec_txt).trim())
-    .filter(Boolean);
+  const lines = entries.map((entry) => entry.text).filter(Boolean);
 
   return lines.join("\n");
 }

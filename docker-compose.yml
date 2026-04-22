@@ -1,0 +1,23 @@
+services:
+  web:
+    image: ocr-karsilastirma:web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      # Use --env-file .env.docker for external OCR.
+      # Use --env-file .env.docker.with-ocr --profile with-ocr for compose OCR.
+      OCR_API_URL: ${OCR_API_URL:-http://host.docker.internal:8000/ocr}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+
+  rapidocr-api:
+    image: qingchen0607/rapid-ocr-api:v20250619
+    profiles: ["with-ocr"]
+    ports:
+      - "8099:9005"
+    restart: unless-stopped
