@@ -45,7 +45,7 @@ OCR_API_URL=http://127.0.0.1:8000/ocr
 npm run dev
 ```
 
-Tarayicidan `http://localhost:3000` adresini acin.
+Tarayicidan `http://localhost:3012` adresini acin.
 
 ## Docker ile Calistirma
 
@@ -58,7 +58,7 @@ docker build -t ocr-karsilastirma .
 ### 2) Docker container run
 
 ```bash
-docker run --rm -p 3000:3000 \
+docker run --rm -p 3012:3000 \
 	-e OCR_API_URL=http://host.docker.internal:8000/ocr \
 	-e OPENAI_API_KEY=your-openai-key \
 	ocr-karsilastirma

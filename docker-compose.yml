@@ -6,10 +6,10 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3012:3000"
     environment:
       NODE_ENV: production
-      PORT: 3000
+      PORT: 3012
       # Use --env-file .env.docker for external OCR.
       # Use --env-file .env.docker.with-ocr --profile with-ocr for compose OCR.
       OCR_API_URL: ${OCR_API_URL:-http://host.docker.internal:8000/ocr}
