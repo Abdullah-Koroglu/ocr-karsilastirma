@@ -24,7 +24,7 @@ export type ParsedDocumentData = {
 };
 
 const SYSTEM_PROMPT =
-  "Sen bir arac ruhsati veri ayiklama uzmansin. Sana verilen karmasik OCR metninden ilgili alanlari bul. Eger bir alan metinde yoksa 'Bulunamadı' yaz. Rakamlari temizle ve sadece sayisal olmasi gereken alanlari (agirlik gibi) sayiya cevir. Belge seri no 2 harf ve 6 rakamdan olusur; arada gecen N veya No varsa kaldir.";
+  "Sen bir arac ruhsati veri ayiklama uzmansin. Sana verilen karmasik OCR metninden ilgili alanlari bul. Eger bir alan metinde yoksa 'Bulunamadı' yaz. Rakamlari temizle ve sadece sayisal olmasi gereken alanlari (agirlik gibi) sayiya cevir. Belge seri no 2 harf ve 6 rakamdan olusur; arada gecen N veya No varsa kaldir. Tescil sira no sadece rakamlardan olusur ve en az 15 hanedir.";
 
 const OUTPUT_SCHEMA = {
   name: "vehicle_registration_fields",
@@ -55,7 +55,10 @@ const OUTPUT_SCHEMA = {
         type: "string",
       },
       tescilSiraNo: {
-        type: "string",
+        anyOf: [
+          { type: "string", pattern: "^\\d{15,}$" },
+          { type: "string", const: "Bulunamadı" },
+        ],
       },
       belgeSeriNo: {
         type: "string",
@@ -124,6 +127,15 @@ function normalizeBelgeSeriNo(value: string | MissingValue) {
   return value.trim();
 }
 
+function normalizeTescilSiraNo(value: string | MissingValue) {
+  if (value === "Bulunamadı") {
+    return value;
+  }
+
+  const digits = value.replace(/\D/g, "");
+  return digits.length >= 15 ? digits : "Bulunamadı";
+}
+
 function getOpenAIClient() {
   const apiKey = process.env.OPENAI_API_KEY;
 
@@ -166,6 +178,7 @@ export async function parseDocumentAction(rawText: string): Promise<ParsedDocume
 
   return {
     ...parsed,
+    tescilSiraNo: normalizeTescilSiraNo(parsed.tescilSiraNo),
     belgeSeriNo: normalizeBelgeSeriNo(parsed.belgeSeriNo),
   };
 }

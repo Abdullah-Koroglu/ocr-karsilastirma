@@ -48,19 +48,30 @@ function findTckn(text: string) {
 }
 
 function findTescilSiraNo(text: string) {
-  const directLabelMatch =
-    firstMatch(text, /TESCIL\s*SIRA\s*NO\s*[:\-]?\s*([A-Z0-9\-]{6,20})/) ??
-    firstMatch(text, /Y\.2\)?\s*TESCIL\s*SIRA\s*NO\s*[:\-]?\s*([A-Z0-9\-]{6,20})/);
+  const toValidTescilSiraNo = (value: string | null) => {
+    if (!value) {
+      return null;
+    }
 
-  if (directLabelMatch) {
-    return directLabelMatch;
+    const digits = value.replace(/\D/g, "");
+    return digits.length >= 15 ? digits : null;
+  };
+
+  const directLabelMatch =
+    firstMatch(text, /TESCIL\s*SIRA\s*NO\s*[:\-]?\s*([^\n\r]{1,40})/) ??
+    firstMatch(text, /Y\.2\)?\s*TESCIL\s*SIRA\s*NO\s*[:\-]?\s*([^\n\r]{1,40})/);
+
+  const directCandidate = toValidTescilSiraNo(directLabelMatch);
+
+  if (directCandidate) {
+    return directCandidate;
   }
 
   if (!/TESCIL\s*SIRA\s*NO|Y\.2\)/.test(text)) {
     return null;
   }
 
-  const candidates = text.match(/\b\d{12,18}\b/g) ?? [];
+  const candidates = text.match(/\b\d{15,}\b/g) ?? [];
   return candidates[0] ?? null;
 }
 
