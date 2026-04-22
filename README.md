@@ -58,7 +58,7 @@ docker build -t ocr-karsilastirma .
 ### 2) Docker container run
 
 ```bash
-docker run --rm -p 3012:3000 \
+docker run --rm -p 3012:3012 \
 	-e OCR_API_URL=http://host.docker.internal:8000/ocr \
 	-e OPENAI_API_KEY=your-openai-key \
 	ocr-karsilastirma

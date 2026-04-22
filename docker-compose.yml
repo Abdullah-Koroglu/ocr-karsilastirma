@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "3012:3000"
+      - "3012:3012"
     environment:
       NODE_ENV: production
       PORT: 3012
