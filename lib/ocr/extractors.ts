@@ -4,6 +4,7 @@ export type RuhsatExtract = {
   plaka: string | null;
   sasiNo: string | null;
   motorNo: string | null;
+  tckn: string | null;
   ruhsatSeriNo: string | null;
   netAgirlik: string | null;
   azamiYukluAgirlik: string | null;
@@ -126,6 +127,7 @@ export function extractRuhsat(rawText: string): RuhsatExtract {
     plaka: plakaFromLabel?.replace(/\s/g, "") ?? null,
     sasiNo: sasiNoFromLabel,
     motorNo: motorNoFromLabel,
+    tckn: findTckn(text),
     ruhsatSeriNo: normalizeBelgeSeriNo(belgeSeriFromLabel),
     netAgirlik: normalizeWeight(netAgirlikFromLabel),
     azamiYukluAgirlik: normalizeWeight(azamiYukluAgirlikFromLabel),
