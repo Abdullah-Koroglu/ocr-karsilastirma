@@ -5,6 +5,7 @@ export type RuhsatExtract = {
   sasiNo: string | null;
   motorNo: string | null;
   tckn: string | null;
+  tescilSiraNo: string | null;
   ruhsatSeriNo: string | null;
   netAgirlik: string | null;
   azamiYukluAgirlik: string | null;
@@ -43,6 +44,23 @@ function firstMatch(text: string, regex: RegExp) {
 
 function findTckn(text: string) {
   const candidates = text.match(/\b[1-9]\d{10}\b/g) ?? [];
+  return candidates[0] ?? null;
+}
+
+function findTescilSiraNo(text: string) {
+  const directLabelMatch =
+    firstMatch(text, /TESCIL\s*SIRA\s*NO\s*[:\-]?\s*([A-Z0-9\-]{6,20})/) ??
+    firstMatch(text, /Y\.2\)?\s*TESCIL\s*SIRA\s*NO\s*[:\-]?\s*([A-Z0-9\-]{6,20})/);
+
+  if (directLabelMatch) {
+    return directLabelMatch;
+  }
+
+  if (!/TESCIL\s*SIRA\s*NO|Y\.2\)/.test(text)) {
+    return null;
+  }
+
+  const candidates = text.match(/\b\d{12,18}\b/g) ?? [];
   return candidates[0] ?? null;
 }
 
@@ -128,6 +146,7 @@ export function extractRuhsat(rawText: string): RuhsatExtract {
     sasiNo: sasiNoFromLabel,
     motorNo: motorNoFromLabel,
     tckn: findTckn(text),
+    tescilSiraNo: findTescilSiraNo(text),
     ruhsatSeriNo: normalizeBelgeSeriNo(belgeSeriFromLabel),
     netAgirlik: normalizeWeight(netAgirlikFromLabel),
     azamiYukluAgirlik: normalizeWeight(azamiYukluAgirlikFromLabel),

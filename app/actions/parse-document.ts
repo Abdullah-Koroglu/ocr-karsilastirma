@@ -10,6 +10,7 @@ export type ParsedDocumentData = {
   motorNo: string | MissingValue;
   tckn: string | MissingValue;
   isimSoyisim: string | MissingValue;
+  tescilSiraNo: string | MissingValue;
   belgeSeriNo: string | MissingValue;
   netAgirlik: number | MissingValue;
   azamiYukluAgirlik: number | MissingValue;
@@ -53,6 +54,9 @@ const OUTPUT_SCHEMA = {
       isimSoyisim: {
         type: "string",
       },
+      tescilSiraNo: {
+        type: "string",
+      },
       belgeSeriNo: {
         type: "string",
       },
@@ -90,6 +94,7 @@ const OUTPUT_SCHEMA = {
       "motorNo",
       "tckn",
       "isimSoyisim",
+      "tescilSiraNo",
       "belgeSeriNo",
       "netAgirlik",
       "azamiYukluAgirlik",

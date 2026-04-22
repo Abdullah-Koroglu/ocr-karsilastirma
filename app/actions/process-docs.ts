@@ -88,6 +88,8 @@ export async function processDocsAction(
           sasiNo: parsedRuhsat.sasiNo === "Bulunamadı" ? null : parsedRuhsat.sasiNo,
           motorNo: parsedRuhsat.motorNo === "Bulunamadı" ? null : parsedRuhsat.motorNo,
           tckn: parsedRuhsat.tckn === "Bulunamadı" ? null : parsedRuhsat.tckn,
+          tescilSiraNo:
+            parsedRuhsat.tescilSiraNo === "Bulunamadı" ? null : parsedRuhsat.tescilSiraNo,
           ruhsatSeriNo: parsedRuhsat.belgeSeriNo === "Bulunamadı" ? null : parsedRuhsat.belgeSeriNo,
           netAgirlik:
             parsedRuhsat.netAgirlik === "Bulunamadı" ? null : String(parsedRuhsat.netAgirlik),
@@ -154,6 +156,7 @@ export async function processDocsAction(
       `Sasi No: ${ruhsat.sasiNo ?? "Bulunamadi"}`,
       `Motor No: ${ruhsat.motorNo ?? "Bulunamadi"}`,
       `TCKN: ${ruhsat.tckn ?? "Bulunamadi"}`,
+      `Tescil Sira No: ${ruhsat.tescilSiraNo ?? "Bulunamadi"}`,
       `Ruhsat Seri No: ${ruhsat.ruhsatSeriNo ?? "Bulunamadi"}`,
       `Net Agirlik: ${ruhsat.netAgirlik ?? "Bulunamadi"}`,
       `Azami Yuklu Agirligi: ${ruhsat.azamiYukluAgirlik ?? "Bulunamadi"}`,
