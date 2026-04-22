@@ -19,6 +19,6 @@ services:
 
   rapidocr-api:
     image: qingchen0607/rapid-ocr-api:v20250619
-    ports:
-      - "8099:9005"
+    expose:
+      - "9005"
     restart: unless-stopped

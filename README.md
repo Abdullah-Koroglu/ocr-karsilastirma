@@ -90,7 +90,8 @@ docker compose --env-file .env.docker.external up --build
 Bu modda `web` container disaridaki OCR endpointine baglanir.
 Linux sunucuda `host.docker.internal` kullanacaksaniz host mapping'inizin desteklendiginizden emin olun.
 
-Disaridan OCR API test etmek isterseniz compose icindeki servis icin `http://localhost:8099/ocr` adresini kullanabilirsiniz.
+Not: Compose icindeki `rapidocr-api` servisi varsayilan olarak sadece Docker internal network uzerinde acilir.
+Host portuna bind edilmez; bu sayede 8099 gibi port cakismalari engellenir.
 
 Env dosyalari:
 
