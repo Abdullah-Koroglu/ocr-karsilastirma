@@ -72,26 +72,30 @@ docker compose --env-file .env.docker up --build
 
 Compose iki farkli mod destekler:
 
-- Dis OCR servisi (varsayilan):
+- Compose icindeki OCR servisi (varsayilan):
 
 ```bash
 docker compose --env-file .env.docker up --build
 ```
 
-Bu modda `.env.docker` icindeki `OCR_API_URL` degeri kullanilir.
+Bu modda `web` servisi `rapidocr-api` servisine Docker internal network uzerinden
+`http://rapidocr-api:9005/ocr` adresiyle baglanir.
 
-- Compose icindeki OCR servisi ile:
+- Dis OCR servisi ile:
 
 ```bash
-docker compose --env-file .env.docker.with-ocr --profile with-ocr up --build
+docker compose --env-file .env.docker.external up --build
 ```
 
-Bu komut `rapidocr-api` servisini de ayaga kaldirir. Disaridan OCR API test etmek isterseniz `http://localhost:8099/ocr` adresini kullanabilirsiniz.
+Bu modda `web` container disaridaki OCR endpointine baglanir.
+Linux sunucuda `host.docker.internal` kullanacaksaniz host mapping'inizin desteklendiginizden emin olun.
+
+Disaridan OCR API test etmek isterseniz compose icindeki servis icin `http://localhost:8099/ocr` adresini kullanabilirsiniz.
 
 Env dosyalari:
 
-- `.env.docker`: Dis OCR servisine baglanan varsayilan ayarlar
-- `.env.docker.with-ocr`: Compose icindeki `rapidocr-api` servisine baglanan ayarlar
+- `.env.docker`: Compose icindeki `rapidocr-api` servisine baglanan varsayilan ayarlar
+- `.env.docker.external`: Docker disindaki OCR servisine baglanan ayarlar
 
 ## Notlar
 
